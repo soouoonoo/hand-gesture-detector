@@ -55,7 +55,7 @@ python -m venv venv
 ## 第2步：激活环境
 
 ```cmd
-venv\Scripts\activate.bat
+source venv/Scripts/activate
 ```
 
 看到 (venv) 前缀表示成功
