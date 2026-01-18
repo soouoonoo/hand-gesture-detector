@@ -33,7 +33,7 @@ python tests/test_camera.py
 ### 运行手势检测
 python src/main.py
 
-##项目结构
+## 项目结构
 hand-gesture-detector/
 ├── src/                    # 源代码
 │   ├── data/              # 数据处理
