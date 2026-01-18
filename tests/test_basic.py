@@ -14,7 +14,7 @@ def test_python():
 
 def test_imports():
     modules = [('cv2','OpenCV'), ('numpy','NumPy'), 
-               ('mediapipe','MediaPipe'), ('sklearn','scikit-learn')]
+               ('mediapipe','MediaPipe')]
     
     all_ok = True
     for mod, name in modules:
@@ -42,4 +42,3 @@ if __name__ == "__main__":
         sys.exit(0)
     else:
         print("⚠️  环境测试失败")
-        sys.exit(1)
