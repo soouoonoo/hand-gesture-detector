@@ -60,7 +60,7 @@ source venv/Scripts/activate
 
 看到 (venv) 前缀表示成功
 
-## 第3步：安装依赖
+## 第3步：安装依赖（出现某些包安不了是因为最新版本python可能缺少某些支持）
 
 ```cmd
 pip install -r requirements.txt
