@@ -2,7 +2,7 @@ Windows-Git安装指南
 
 # 一、安装准备（按顺序）
 
-## 第1步：安装Python
+## 第1步：安装Python(安过VS Code可忽略)
 
 1. 浏览器打开 python.org
 2. 下载 Python 3.9+ Windows安装包
@@ -21,6 +21,7 @@ Windows-Git安装指南
 打开CMD（按Win+R，输入cmd，回车）
 输入：
 python --version   （应显示Python 3.9.x）
+（code --version ，如果用VS Code）
 git --version      （应显示git version 2.x.x）
 ```
 
