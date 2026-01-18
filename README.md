@@ -34,6 +34,7 @@ python tests/test_camera.py
 python src/main.py
 
 ## 项目结构
+```bash
 hand-gesture-detector/
 ├── src/                    # 源代码
 │   ├── data/              # 数据处理
@@ -45,3 +46,4 @@ hand-gesture-detector/
 ├── notebooks/             # Jupyter实验
 ├── requirements.txt       # Python依赖
 └── README.md             # 项目说明
+```
