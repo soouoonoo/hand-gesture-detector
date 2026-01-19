@@ -107,7 +107,7 @@ class HandDetector:
     
     def get_finger_tip_positions(self, img):
         """
-        获取指尖位置（简化版）
+        获取指尖位置
         指尖对应的索引: 4(拇指), 8(食指), 12(中指), 16(无名指), 20(小指)
         """
         fingertips = []
@@ -161,4 +161,9 @@ def test_detector():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     
-    cap
+    cap.release()
+    cv2.destroyAllWindows()
+    print("测试完成")
+
+if __name__=="__main__":
+    test_detector()
