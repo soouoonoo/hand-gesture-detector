@@ -1,25 +1,16 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
 venv/
-env/
 .venv/
-*.egg-info/
-dist/
-build/
+
+# 数据
 data/
 models/
-*.pkl
-*.h5
-*.pth
+
+# IDE
 .vscode/
 .idea/
-*.swp
-*.swo
+
+# 系统
 .DS_Store
-Thumbs.db
-upyter
-.ipynb_checkpoints/
