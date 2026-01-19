@@ -2,7 +2,15 @@
 手势识别系统主程序
 """
 import cv2
-from utils.hand_detector import HandDetector
+if __name__=="__main__":#解决导入路径问题
+    import sys
+    import os
+    #获取项目根目录
+    project_root=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.insert(0,project_root)#加到开头
+    from src.utils.hand_detector import HandDetector
+else:#如果作为模块导入，使用相对导入
+    from .utils.hand_detector import HandDetector
 
 def main():
     print("手势识别系统启动...")

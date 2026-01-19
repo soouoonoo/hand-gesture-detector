@@ -5,7 +5,7 @@
 """
 
 __version__ = "1.0.0"
-__author__ = "手势识别项目团队"
+__author__ = "soouoonoo"
 
 from .utils.hand_detector import HandDetector
 from .data.collector import GestureCollector
