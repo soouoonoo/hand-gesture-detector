@@ -1,3 +1,7 @@
+"""
+手部特征计算器方法试点
+"""
+
 import cv2
 import mediapipe as mp
 import numpy as np

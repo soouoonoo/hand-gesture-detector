@@ -4,64 +4,15 @@
 import cv2
 import sys
 import os
-import time
 
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(__file__))) #添加引用路径
 
-from src.hand_detector import HandDetector
-
-class FrameSaver:
-    """帧保存管理器"""
-    def __init__(self, base_dir="saved_frames"):
-        self.base_dir = base_dir
-        self.save_count = 0
-        self.auto_save = False  # 自动保存模式
-        self.auto_save_interval = 10  # 自动保存间隔（帧数）
-
-        # 创建目录
-        self.create_directories()
-
-    def create_directories(self):
-        """创建保存目录结构"""
-        # 主目录
-        os.makedirs(self.base_dir, exist_ok=True)
-
-        # 子目录：按日期分类
-        date_str = time.strftime("%Y%m%d")
-        self.today_dir = os.path.join(self.base_dir, date_str)
-        os.makedirs(self.today_dir, exist_ok=True)
-
-        print(f"保存目录: {os.path.abspath(self.today_dir)}")
-
-    def save_frame(self, frame, prefix="hand"):
-        """保存一帧图像"""
-        self.save_count += 1
-
-        # 生成文件名
-        timestamp = time.strftime("%H%M%S")
-        filename = f"{prefix}_{timestamp}_{self.save_count:04d}.jpg"
-        filepath = os.path.join(self.today_dir, filename)
-
-        # 保存图像
-        success = cv2.imwrite(filepath, frame)
-
-        if success:
-            return True, filepath
-        else:
-            return False, filepath
-
-    def get_save_info(self):
-        """获取保存信息"""
-        return {
-            "total_saved": self.save_count,
-            "save_dir": self.today_dir,
-            "auto_save": self.auto_save,
-            "auto_interval": self.auto_save_interval
-        }
+from src.utils import HandDetector
+from frame_saver import FrameSaver
 
 def main():
-    """主函数"""
-    print("=== 手势识别系统 v0.2 ===")
+    """主函数，基础识别和保存（尚未添加手部特征计算模块）"""
+    print("=== 手势识别系统 v0.3 ===")
     print("快捷键:")
     print("  q - 退出程序")
     print("  s - 保存当前帧")
@@ -120,7 +71,7 @@ def main():
                    (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
 
         # 2. 帧率
-        if frame_count % 30 == 0:
+        if frame_count % 10 == 0:
             detector.update_fps()
         cv2.putText(processed_frame, f"FPS: {detector.fps:.1f}", 
                    (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
@@ -136,9 +87,9 @@ def main():
                    (10, 140), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 200, 0), 2)
 
         # 5. 帮助提示
-        help_text = "q:quit s:save a:automatic d:data"
+        help_text = "q:quit s:save a:automatic d:data c:clear"
         cv2.putText(processed_frame, help_text, 
-                   (10, 180), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
+                   (10, 180), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 1)
 
         # 显示画面
         cv2.imshow("hang_gesture", processed_frame)
