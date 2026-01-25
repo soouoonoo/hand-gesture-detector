@@ -6,6 +6,7 @@ import mediapipe as mp
 import time
 import numpy as np
 
+
 class HandDetector:
     '''手部位置获取器'''
     def __init__(self, mode=False, max_hands=2, detection_con=0.5, track_con=0.5):
@@ -192,13 +193,14 @@ class HandFeatureCalculator:
             p2 = landmarks_array[indices[1]]
             p3 = landmarks_array[indices[2]]
 
-            angle = self._calculate_angle(p1, p2, p3)
+            angle = self.calculate_angle(p1, p2, p3)
             angles[joint_name] = angle
 
         return angles
     
-    def _calculate_angle(self, p1, p2, p3):
+    def calculate_angle(self, p1, p2, p3):
         '''计算三个点之间的角度'''
+
         # 计算向量
         v1 = p1 - p2  # 从 p2 指向 p1
         v2 = p3 - p2  # 从 p2 指向 p3
