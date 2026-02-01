@@ -80,9 +80,12 @@ while cap.isOpened():
                 
 
             ############以下是试验区，可以测试单一特定姿势的方法#############
-            result=MultipleHandGestures.DetectNumberOne(hand_landmarks,[800,500],True)
-            cv2.putText(image, f"{result[0]}", (400, 50), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+            # 测试1：
+            # result=MultipleHandGestures.DetectNumberOne(hand_landmarks,[800,500],True)
+            # cv2.putText(image, f"{result[0]}", (400, 50), 
+            #                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+            
             #######################################################
     
     # 如果没有检测到手，显示提示

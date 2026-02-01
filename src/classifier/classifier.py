@@ -1,5 +1,8 @@
 """
-分类器框架，请修改
+分类器简单框架（以SVM为例），请修改
+要基于写好的feature/extractor.py(做完可以在那个test_classifier用来测试)
+随便用AI，实现思路简单些，只要保证性能好、检测准确就行，需要反复调整
+做好之后就push，或者直接发给我，我再改改
 """
 
 from sklearn.svm import SVC
