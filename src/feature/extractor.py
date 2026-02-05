@@ -396,58 +396,68 @@ class GestureFeatureExtractor:
 
     def _post_process_features(self, raw_features):
         """
-        特征后处理方法（改进版本）
-        改进：更智能的归一化处理
+        特征后处理方法（修复版）- 解决硬问题
         """
         # 1. 处理NaN和Inf
-        processed = np.nan_to_num(raw_features, nan=0.0, posinf=1.0, neginf=0.0)
+        processed = np.nan_to_num(raw_features, nan=0.0, posinf=10.0, neginf=0.0)
         
-        # 2. 动态计算特征索引范围
-        # 手指角度：前5个
-        angle_start, angle_end = 0, 5
-        # 指尖距离：接下来8个
-        distance_start, distance_end = 5, 13
-        # 手指弯曲：接下来5个
-        curl_start, curl_end = 13, 18
-        # 手掌方向：接下来2个
-        palm_start, palm_end = 18, 20
-        # 手指状态：最后5个
-        state_start, state_end = 20, 25
-
-        # 检查特征维度是否匹配
+        # 检查特征维度
         if len(processed) != 25:
             print(f"警告：特征维度{len(processed)}不等于25")
-            # 如果维度不匹配，直接返回原始值
             return processed
 
-        # 3. 分别处理不同类型的特征
-        # 角度特征归一化 (0-180度)
-        processed[angle_start:angle_end] = np.clip(
-            processed[angle_start:angle_end] / 180.0, 0.0, 1.0
-        )
+        # 2. 特征索引
+        angle_idx = slice(0, 5)      # 0-4: 手指角度
+        distance_idx = slice(5, 13)  # 5-12: 指尖距离  
+        curl_idx = slice(13, 18)     # 13-17: 手指弯曲
+        palm_idx = slice(18, 20)     # 18-19: 手掌方向
+        state_idx = slice(20, 25)    # 20-24: 手指状态
 
-        # 距离特征归一化 (假设最大3.0)
-        distances = processed[distance_start:distance_end]
-        normalized = np.clip(distances / 3.0, 0.0, 1.0)
-        processed[distance_start:distance_end] = normalized
-
-        # 弯曲特征已经是[0,1]范围，只需裁剪
-        processed[curl_start:curl_end] = np.clip(
-            processed[curl_start:curl_end], 0.0, 1.0
-        )
-
-        # 手掌方向特征：从[-1,1]转换到[0,1]
-        processed[palm_start:palm_end] = (
-            processed[palm_start:palm_end] + 1.0
-        ) / 2.0
-
-        # 状态特征：已经是0或1，确保二值化
-        states = processed[state_start:state_end]
-        processed[state_start:state_end] = np.where(states > 0.5, 1.0, 0.0)
-
-        # 4. 最终裁剪到[0,1]范围
-        processed = np.clip(processed, 0.0, 1.0)
-
+        # 3. 改进的归一化策略
+        
+        # 角度特征：使用非线性变换保留区分度
+        angles = processed[angle_idx]
+        # 使用sigmoid-like变换：保留原始比例，但限制在合理范围
+        angles_norm = angles / 120.0  # 120度作为参考，而不是180
+        angles_norm = 1.0 / (1.0 + np.exp(-angles_norm * 3))  # 平滑变换
+        processed[angle_idx] = np.clip(angles_norm, 0.1, 0.9)  # 保留边界空间
+        
+        # 距离特征：动态归一化，允许超出范围
+        distances = processed[distance_idx]
+        # 计算动态范围（基于训练数据的经验值）
+        dist_mean = np.mean(distances)
+        dist_std = np.std(distances)
+        if dist_std > 0:
+            # Z-score归一化，保留超出范围的值
+            distances_norm = (distances - dist_mean) / (dist_std * 2)
+        else:
+            distances_norm = distances / 2.0  # 备选方案
+        
+        processed[distance_idx] = distances_norm
+        
+        # 弯曲特征：保持原样，轻微归一化
+        curls = processed[curl_idx]
+        # 弯曲程度通常在0-2之间，0=直，2=非常弯曲
+        curls_norm = curls / 1.5
+        processed[curl_idx] = np.clip(curls_norm, 0.0, 1.5)  # 允许超过1
+        
+        # 手掌方向：保持原逻辑（合理）
+        palm = processed[palm_idx]
+        processed[palm_idx] = (palm + 1.0) / 2.0
+        
+        # 状态特征：不要强制二值化！
+        states = processed[state_idx]
+        # 使用sigmoid保留渐变信息
+        states_norm = 1.0 / (1.0 + np.exp(-states * 3))
+        processed[state_idx] = states_norm  # 保持在0-1之间，但不是严格的0或1
+        
+        # 4. 最终处理：轻微缩放，不严格裁剪
+        # 整体缩放到合理范围，但不强制在[0,1]
+        processed = processed / 2.0  # 缩放到[-0.5, 1.5]左右
+        
+        # 防止极端值，但不丢失信息
+        processed = np.clip(processed, -1.0, 2.0)
+        
         return processed
     
     def _get_thumb_angle(self, landmarks):

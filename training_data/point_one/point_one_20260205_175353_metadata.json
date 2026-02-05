@@ -1,0 +1,9 @@
+{
+  "gesture_id": "point_one",
+  "sample_count": 150,
+  "timestamp": "20260205_175353",
+  "feature_dimension": 25,
+  "landmarks_count": 21,
+  "data_format": "numpy_array_21x3",
+  "description": "pose 'one'"
+}

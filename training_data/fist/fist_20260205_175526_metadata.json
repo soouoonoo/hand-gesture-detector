@@ -1,0 +1,9 @@
+{
+  "gesture_id": "fist",
+  "sample_count": 150,
+  "timestamp": "20260205_175526",
+  "feature_dimension": 25,
+  "landmarks_count": 21,
+  "data_format": "numpy_array_21x3",
+  "description": "fasten your fist"
+}
